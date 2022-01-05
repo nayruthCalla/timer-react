@@ -1,5 +1,7 @@
+import {useState, useEffect, useRef} from 'react';
 import styled from 'styled-components';
 import icon from '../../assets/images/gear.svg';
+import {fill} from '../../utils/utils';
 
 const TimerCont = styled.div`
   align-items: center;
@@ -26,6 +28,7 @@ const Time = styled.div`
 `;
 
 const Minutes = styled.div`
+  display: flex;
 `;
 
 const Input = styled.input`
@@ -35,7 +38,7 @@ const Input = styled.input`
   color: white;
   font-family: "bebas";
   font-size: 196px;
-  height: 170px;
+  height: 214px;
   width: 150px;
   text-align: center;
   outline: none;
@@ -43,7 +46,6 @@ const Input = styled.input`
   border-bottom: none;
 }
 `;
-
 const Colon = styled.div``;
 
 const Seconds = styled.div``;
@@ -73,21 +75,96 @@ const ButtonSettings = styled.button`
   opacity: 1;
 }
 `;
-const Timer = () => {
+const Timer = ({setColor}) => {
+  
+  const [inputValue, setInputValue] = useState("");
+  const [inputValueSec, setInputValueSec] = useState("");
+  const [timeIDH, setTimeIDH] = useState();
+  const [text, setText] = useState("START");
+
+  const inputT = useRef("");
+  const inputSec = useRef("");
+
+  useEffect(()=>{  
+       console.log(inputValue)
+    if(inputValue === '00' && inputValueSec === '00'){
+      setColor('red');
+    }
+  },[inputValue,inputValueSec])
+
+  const timeHandler = () => {
+    inputT.current.disabled = false;
+    inputSec.current.disabled = false;
+    
+  }  
+  const valueHandler = (e) => {
+    
+    if(Number(e.target.value)<60 && Number(e.target.value)>0){
+      setInputValue(e.target.value.toString());
+    }else{
+      setInputValue('00')
+    }
+  }
+
+  const valueHandlerSec = (e) => {
+    
+    if(Number(e.target.value)<60 && Number(e.target.value)>0){
+      setInputValueSec(e.target.value.toString());
+    }else{
+      setInputValueSec('00')
+    }
+    
+    
+  }
+
+const startHandler = (e) => {  
+  const tick = (finishTime) =>{ 
+    const distance = new Date(finishTime).getTime()-new Date().getTime();   
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);      
+    if (seconds <0) {          
+      clearInterval(timerID);
+   }
+
+   setInputValue(fill(minutes,2));
+   setInputValueSec(fill(seconds,2));
+   }
+   const newTimer = new Date(Date.now() + (Number(inputValue)* 60 * 1000) +(Number(inputValueSec) * 1000));   
+   const timerID = setInterval( () => tick(newTimer), 1000 );
+   setTimeIDH(timerID);
+   inputT.current.disabled = true;
+   inputSec.current.disabled = true;
+
+   console.log(e.target.outerText);
+   //e.target.outerText = 'STOP'
+   setText('STOP');
+   if(e.target.outerText === 'STOP'){    
+    console.log('hola')
+      return function cleanup() {
+      clearInterval(timerID);
+    }; 
+    
+   }
+     return function cleanup() {
+      clearInterval(timerID);
+    };    
+    
+}
+
   return (
     <TimerCont>
       <Time>
         <Minutes>
-          <Input  type="text" value="15" disabled/>
-        </Minutes>          
-        <Colon>:</Colon>
+          <Input ref = {inputT} id= "min" type="number" value = {inputValue === '-1' ? '': inputValue} onChange={valueHandler} placeholder="00" disabled/>
+        </Minutes>
+        <Colon >:</Colon>
         <Seconds>
-        <Input  type="text" value="00" disabled/>            
+          <Input ref = {inputSec} id= "sec" type="number" value = {inputValueSec === '-1' ? '' : inputValueSec} onChange={valueHandlerSec} placeholder="00" disabled/>
         </Seconds>
       </Time>
-      <ButtonStart>start</ButtonStart>
-      <ButtonSettings>
-      <img src= {icon} alt="Settings" />
+      <ButtonStart type = "button" onClick={startHandler} >{text}</ButtonStart>
+      <ButtonSettings type = "button" onClick={timeHandler}>
+        <img src= {icon} alt="Settings" />
       </ButtonSettings>
     </TimerCont>
   )

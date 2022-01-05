@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
+import {useState} from 'react';
+import styled, {css} from 'styled-components';
 import Timer from './Timer';
 
 
@@ -14,29 +14,31 @@ const Container = styled.div`
   width: 518px;
 `;
 
-const Ring = styled.div`
-  position: absolute;
-  left: 0;
-  stroke: #09A65A;
-  top: 0;
-  z-index: 1;
-  & ending circle {
-  stroke: #900A0A;
-}
+const Ring = styled('div')(
+  ({colorR})=> css`
+    position: absolute;
+    left: 0;
+    stroke: ${colorR === 'red'?'#900A0A':'#09A65A'};
+    top: 0;
+    z-index: 1;
+  `
+);
+const Circle = styled.circle`
+  stroke-width: 9px;
 `;
 
-
-
-
 const TimerTemplate = () => {
+  
+  const [colorRing,setColorRing] = useState('');
+
   return (
     <Container>
-      <Ring >
+      <Ring colorR = {colorRing} >
         <svg width="518" height="518" viewBox="0 0 518 518">
-          <circle stroke-width="9px" x="0" y="y" cx="259" cy="259" r="254" />
+          <Circle  x="0" y="y" cx="259" cy="259" r="254" />
         </svg>
       </Ring>
-      <Timer />
+      <Timer setColor = {setColorRing}/>
     </Container>
   )
 }
