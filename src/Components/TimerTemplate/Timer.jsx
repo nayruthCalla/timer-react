@@ -45,6 +45,7 @@ const Input = styled.input`
   &:disabled {
   border-bottom: none;
 }
+
 `;
 const Colon = styled.div``;
 
@@ -84,70 +85,71 @@ const Timer = ({setColor}) => {
 
   const inputT = useRef("");
   const inputSec = useRef("");
+  const buttonStart = useRef("");
 
   useEffect(()=>{  
-       console.log(inputValue)
     if(inputValue === '00' && inputValueSec === '00'){
       setColor('red');
     }
   },[inputValue,inputValueSec])
 
   const timeHandler = () => {
+    setInputValue('');
+    setInputValueSec(''); 
     inputT.current.disabled = false;
     inputSec.current.disabled = false;
+    buttonStart.current.disabled = false;
     
   }  
   const valueHandler = (e) => {
     
-    if(Number(e.target.value)<60 && Number(e.target.value)>0){
+    if(Number(e.target.value)<60 && Number(e.target.value)>=0){
       setInputValue(e.target.value.toString());
     }else{
-      setInputValue('00')
+      setInputValue('');
     }
   }
 
   const valueHandlerSec = (e) => {
     
-    if(Number(e.target.value)<60 && Number(e.target.value)>0){
+    if(Number(e.target.value)<60 && Number(e.target.value)>=0){
       setInputValueSec(e.target.value.toString());
     }else{
-      setInputValueSec('00')
+      setInputValueSec('');
     }
     
     
   }
 
-const startHandler = (e) => {  
-  const tick = (finishTime) =>{ 
-    const distance = new Date(finishTime).getTime()-new Date().getTime();   
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);      
-    if (seconds <0) {          
-      clearInterval(timerID);
-   }
+const startHandler = (e) => {
+  if(text === 'START'){    
+    const tick = (finishTime) =>{ 
+      const distance = new Date(finishTime).getTime()-new Date().getTime();   
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);      
+      if (seconds <0) {   
+        setText('START');
+        setColor('green'); 
+        clearInterval(timerID);
 
-   setInputValue(fill(minutes,2));
-   setInputValueSec(fill(seconds,2));
-   }
-   const newTimer = new Date(Date.now() + (Number(inputValue)* 60 * 1000) +(Number(inputValueSec) * 1000));   
-   const timerID = setInterval( () => tick(newTimer), 1000 );
-   setTimeIDH(timerID);
-   inputT.current.disabled = true;
-   inputSec.current.disabled = true;
-
-   console.log(e.target.outerText);
-   //e.target.outerText = 'STOP'
-   setText('STOP');
-   if(e.target.outerText === 'STOP'){    
-    console.log('hola')
-      return function cleanup() {
-      clearInterval(timerID);
-    }; 
-    
-   }
-     return function cleanup() {
-      clearInterval(timerID);
-    };    
+     }
+  
+     setInputValue(fill(minutes,2));
+     setInputValueSec(fill(seconds,2));
+     }
+     const newTimer = new Date(Date.now() + (Number(inputValue)* 60 * 1000) +(Number(inputValueSec) * 1000));   
+     const timerID = setInterval( () => tick(newTimer), 1000 );
+     setTimeIDH(timerID);
+     inputT.current.disabled = true;
+     inputSec.current.disabled = true;   
+     setText('STOP');
+       return function cleanup() {
+        clearInterval(timerID);
+      };    
+  } else if(text === 'STOP') {
+    clearInterval(timeIDH); 
+    setText('START');   
+  }
     
 }
 
@@ -155,14 +157,14 @@ const startHandler = (e) => {
     <TimerCont>
       <Time>
         <Minutes>
-          <Input ref = {inputT} id= "min" type="number" value = {inputValue === '-1' ? '': inputValue} onChange={valueHandler} placeholder="00" disabled/>
+          <Input ref = {inputT} id= "min" type="number" value = {Number(inputValue) >= 0 ? inputValue: '' } onChange={valueHandler} placeholder="00" disabled/>
         </Minutes>
         <Colon >:</Colon>
         <Seconds>
-          <Input ref = {inputSec} id= "sec" type="number" value = {inputValueSec === '-1' ? '' : inputValueSec} onChange={valueHandlerSec} placeholder="00" disabled/>
+          <Input ref = {inputSec} id= "sec" type="number" value = {Number(inputValueSec) >= 0 ? inputValueSec : ''} onChange={valueHandlerSec} placeholder="00" disabled/>
         </Seconds>
       </Time>
-      <ButtonStart type = "button" onClick={startHandler} >{text}</ButtonStart>
+      <ButtonStart ref = {buttonStart} type = "button" onClick={startHandler}>{text}</ButtonStart>
       <ButtonSettings type = "button" onClick={timeHandler}>
         <img src= {icon} alt="Settings" />
       </ButtonSettings>
