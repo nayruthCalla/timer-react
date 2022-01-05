@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {useState, useEffect, useRef} from 'react';
 import styled from 'styled-components';
 import icon from '../../assets/images/gear.svg';
