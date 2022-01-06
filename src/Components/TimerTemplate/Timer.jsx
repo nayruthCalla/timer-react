@@ -30,10 +30,6 @@ const Time = styled.div`
   top: 30px;
 `;
 
-const Minutes = styled.div`
-  display: flex;
-`;
-
 const Input = styled.input`
   border: 0;
   border-bottom: 1px dashed white;
@@ -55,7 +51,6 @@ const Colon = styled.div`
     margin-top: 41px;
 `;
 
-const Seconds = styled.div``;
 
 const ButtonStart = styled.button`
   cursor: pointer;

@@ -1,10 +1,10 @@
 import TimerTemplate from "./TimerTemplate/TimerTemplate";
 import styled from "styled-components";
 import "../css/App.css";
-import ma1 from "../assets/images/man1.png";
-import ma2 from "../assets/images/man2.png";
-import ma3 from "../assets/images/man3.png";
-import ma4 from "../assets/images/ma4.png";
+// import ma1 from "../assets/images/man1.png";
+// import ma2 from "../assets/images/man2.png";
+// import ma3 from "../assets/images/man3.png";
+// import ma4 from "../assets/images/ma4.png";
 import ma5 from "../assets/images/man5.png";
 
 const Container = styled.div`
