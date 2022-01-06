@@ -8,10 +8,10 @@ const Container = styled.div`
   border-radius: 50%;
   box-shadow: -5px 14px 44px #000000, 5px -16px 50px rgba(255, 255, 255, 0.15);
   display: flex;
-  height: 518px;
+  height: 418px;
   justify-content: center;
   position: relative;
-  width: 518px;
+  width: 418px;
 `;
 
 const Ring = styled('div')(
@@ -32,9 +32,9 @@ const TimerTemplate = () => {
   const [colorRing,setColorRing] = useState('');
 
   return (
-    <Container>
+    <Container>      
       <Ring colorR = {colorRing} >
-        <svg width="518" height="518" viewBox="0 0 518 518">
+        <svg width="418" height="418" viewBox="0 0 518 518">
           <Circle  x="0" y="y" cx="259" cy="259" r="254" />
         </svg>
       </Ring>

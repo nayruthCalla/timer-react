@@ -1,6 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {useState, useEffect, useRef} from 'react';
 import styled from 'styled-components';
+import Swal from 'sweetalert2';
+import imgTimer from '../../assets/images/clockI.jpg';
 import icon from '../../assets/images/gear.svg';
 import {fill} from '../../utils/utils';
 
@@ -12,10 +14,10 @@ const TimerCont = styled.div`
   color: white;
   display: flex;
   flex-direction: column;
-  height: 500px;
+  height: 400px;
   justify-content: center;
   position: relative;
-  width: 500px;
+  width: 400px;
   z-index: 2;
 `;
 
@@ -38,9 +40,9 @@ const Input = styled.input`
   background: none;
   color: white;
   font-family: "bebas";
-  font-size: 196px;
-  height: 214px;
-  width: 150px;
+  font-size: 136px;
+  height: 242px;
+  width: 123px;
   text-align: center;
   outline: none;
   &:disabled {
@@ -48,7 +50,10 @@ const Input = styled.input`
 }
 
 `;
-const Colon = styled.div``;
+const Colon = styled.div`
+    font-size: 134px;
+    margin-top: 41px;
+`;
 
 const Seconds = styled.div``;
 
@@ -77,6 +82,7 @@ const ButtonSettings = styled.button`
   opacity: 1;
 }
 `;
+
 const Timer = ({setColor}) => {
   
   const [inputValue, setInputValue] = useState("");
@@ -128,7 +134,15 @@ const startHandler = (e) => {
       const distance = new Date(finishTime).getTime()-new Date().getTime();   
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);      
-      if (seconds <0) {   
+      if (seconds <0) {
+        Swal.fire({
+          title: 'Sweet!',
+          text: 'Modal with a custom image.',
+          imageUrl: `${imgTimer}`,
+          imageWidth: 256,
+          imageHeight: 200,
+          imageAlt: 'Custom image',
+        });
         setText('START');
         setColor('green'); 
         clearInterval(timerID);
@@ -157,13 +171,13 @@ const startHandler = (e) => {
   return (
     <TimerCont>
       <Time>
-        <Minutes>
+        
           <Input ref = {inputT} id= "min" type="number" value = {Number(inputValue) >= 0 ? inputValue: '' } onChange={valueHandler} placeholder="00" disabled/>
-        </Minutes>
+        
         <Colon >:</Colon>
-        <Seconds>
+        
           <Input ref = {inputSec} id= "sec" type="number" value = {Number(inputValueSec) >= 0 ? inputValueSec : ''} onChange={valueHandlerSec} placeholder="00" disabled/>
-        </Seconds>
+        
       </Time>
       <ButtonStart ref = {buttonStart} type = "button" onClick={startHandler}>{text}</ButtonStart>
       <ButtonSettings type = "button" onClick={timeHandler}>
