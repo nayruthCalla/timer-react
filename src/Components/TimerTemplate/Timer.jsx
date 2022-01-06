@@ -131,8 +131,8 @@ const startHandler = (e) => {
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);      
       if (seconds <0) {
         Swal.fire({
-          title: 'Sweet!',
-          text: 'Modal with a custom image.',
+          title: 'Hora!',
+          text: 'Finalizó el tiempo!',
           imageUrl: `${imgTimer}`,
           imageWidth: 256,
           imageHeight: 200,
